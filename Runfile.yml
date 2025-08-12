@@ -1,0 +1,70 @@
+env:
+  COLOR_OVERRIDES:
+    sh: |+
+      cat ./whisker-color-overrides.json | jq -rcM 'map_values(
+        . = map_values(
+          . = ltrimstr("#")
+        )
+      )'
+
+  OUTPUT_DIR: 
+    sh: echo "$HOME/.colorscheme.d"
+
+tasks:
+  light-theme:
+    env:
+      flavour: latte
+    cmd:
+      - run: generate
+      - gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Light-Solid'
+
+  dark-theme:
+    env:
+      flavour: mocha
+    cmd:
+      - run: generate
+      - gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark'
+
+  generate:
+    env:
+      flavour:
+        required: true
+      OUTPUT_DIR:
+        required: true
+      KITTY_BG_IMAGE_FILE:
+        sh: echo "$OUTPUT_DIR/kitty/background.png"
+    cmd:
+      - mkdir -p $OUTPUT_DIR
+      - |+
+        pushd templates > /dev/null 2>&1
+        for file in $(ls ./**/*.tera); do
+          DEST=${OUTPUT_DIR}/$(dirname $file) whiskers -f "$flavour" $file --color-overrides $COLOR_OVERRIDES
+        done
+        popd > /dev/null 2>&1
+      - run: setup/kitty
+      - run: setup/tmux
+      - run: setup/k9s
+
+  setup/k9s:
+    cmd:
+      - mkdir -p ~/.config/k9s/skins
+      - ln -sf $OUTPUT_DIR/k9s/* ~/.config/k9s/skins/
+
+  setup/tmux:
+    env:
+      file: ./templates/tmux.tera
+    cmd:
+      - mkdir -p ~/.config/tmux/themes
+      - ln -sf $OUTPUT_DIR/tmux/* ~/.config/tmux/themes/
+
+  setup/kitty:
+    env:
+      KITTY_BG_IMAGE_FILE:
+        required: true
+    cmd:
+      - |+
+        if [[ "$flavour" = "mocha" ]]; then
+          ln -sf $PWD/templates/kitty/kitty-background-dark.png $KITTY_BG_IMAGE_FILE
+        else
+          ln -sf $PWD/templates/kitty/kitty-background-light.png $KITTY_BG_IMAGE_FILE
+        fi

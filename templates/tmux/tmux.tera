@@ -1,0 +1,42 @@
+---
+whiskers:
+  version: "2.1.1"
+  matrix:
+    - flavor
+  filename: '{{get_env(name="DEST")}}/theme.sh'
+---
+{%- set palette = flavor.colors -%}
+# vim:set ft=tmux:
+
+# --> Catppuccin ({{ flavor.identifier | capitalize }})
+thm_bg="#{{ palette.base.hex | lower }}"
+thm_fg="#{{ palette.text.hex | lower }}"
+
+# Colors
+thm_rosewater="#{{ palette.rosewater.hex | lower }}"
+thm_flamingo="#{{ palette.flamingo.hex | lower }}"
+thm_rosewater="#{{ palette.rosewater.hex | lower }}"
+thm_pink="#{{ palette.pink.hex | lower }}"
+thm_mauve="#{{ palette.mauve.hex | lower }}"
+thm_red="#{{ palette.red.hex | lower }}"
+thm_maroon="#{{ palette.maroon.hex | lower }}"
+thm_peach="#{{ palette.peach.hex | lower }}"
+thm_yellow="#{{ palette.yellow.hex | lower }}"
+thm_green="#{{ palette.green.hex | lower }}"
+thm_teal="#{{ palette.teal.hex | lower }}"
+thm_sky="#{{ palette.sky.hex | lower }}"
+thm_sapphire="#{{ palette.sapphire.hex | lower }}"
+thm_blue="#{{ palette.blue.hex | lower }}"
+thm_lavender="#{{ palette.lavender.hex | lower }}"
+
+# Surfaces and overlays
+thm_subtext_2="#{{ palette.subtext0.hex | lower }}"
+thm_subtext_1="#{{ palette.subtext1.hex | lower }}"
+thm_overlay_2="#{{ palette.overlay2.hex | lower }}"
+thm_overlay_1="#{{ palette.overlay1.hex | lower }}"
+thm_overlay_0="#{{ palette.overlay0.hex | lower }}"
+thm_surface_2="#{{ palette.surface2.hex | lower }}"
+thm_surface_1="#{{ palette.surface1.hex | lower }}"
+thm_surface_0="#{{ palette.surface0.hex | lower }}"
+thm_mantle="#{{ palette.mantle.hex | lower }}"
+thm_crust="#{{ palette.crust.hex | lower }}"
