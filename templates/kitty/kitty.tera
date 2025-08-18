@@ -85,7 +85,7 @@ color14 #{{ teal.hex }}
 color7  #{% if flavor.dark %}{{ subtext1.hex }}{% else %}{{ surface2.hex }}{% endif %}
 color15 #{% if flavor.dark %}{{ subtext0.hex }}{% else %}{{ surface1.hex }}{% endif %}
 
-{# background_tint  {% if flavor.dark %}0.80{% else %}0.40{% endif %} #}
-{# background_image {{ get_env(name="KITTY_BG_IMAGE_FILE") }} #}
-{# background_image_layout mirror-tiled #}
+background_tint  {% if flavor.dark %}0.80{% else %}0.40{% endif %}
+background_image {{ get_env(name="KITTY_BG_IMAGE_FILE") }}
+background_image_layout mirror-tiled
 
