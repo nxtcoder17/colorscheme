@@ -1,0 +1,33 @@
+dark:
+  bg:
+    default: "#1f1f28"
+    surface: "#2a2a37"
+    highlight: "#363646"
+  fg:
+    default: "#dcd7ba"
+    muted: "#727169"
+    subtle: "#54546d"
+  colors:
+    red: "#e46876"
+    green: "#98bb6c"
+    yellow: "#e6c384"
+    blue: "#7e9cd8"
+    magenta: "#a89ecb"
+    cyan: "#7aa89f"
+
+light:
+  bg:
+    default: "#f5f3ee"
+    surface: "#e9e6df"
+    highlight: "#ddd9d0"
+  fg:
+    default: "#2a2a37"
+    muted: "#8a887f"
+    subtle: "#a8a69f"
+  colors:
+    red: "#c84053"
+    green: "#5f7f3a"
+    yellow: "#b38a3c"
+    blue: "#4c6fae"
+    magenta: "#6f5fa6"
+    cyan: "#4a8a7a"

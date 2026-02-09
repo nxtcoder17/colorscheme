@@ -1,0 +1,79 @@
+# vim:ft=kitty
+
+## name: Colorscheme Dark
+
+# The basic colors
+foreground              #{{ fg "default" }}
+background              #{{ bg "default" }}
+selection_foreground    #{{ bg "default" }}
+selection_background    #{{ fg "default" }}
+
+# Cursor colors
+cursor                  #{{ fg "default" }}
+cursor_text_color       #{{ bg "default" }}
+
+# URL underline color when hovering with mouse
+url_color               #{{ colors "blue" }}
+
+# Kitty window border colors
+active_border_color     #{{ bg "highlight" }}
+inactive_border_color   #{{ bg "surface" }}
+bell_border_color       #{{ colors "yellow" }}
+
+# OS Window titlebar colors
+wayland_titlebar_color system
+macos_titlebar_color system
+
+# Tab bar colors
+active_tab_foreground   #{{ colors "magenta" }}
+active_tab_background   #{{ bg "default" }}
+inactive_tab_foreground #{{ fg "muted" }}
+inactive_tab_background #{{ bg "surface" }}
+tab_bar_background      #{{ bg "default" }}
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground #{{ bg "default" }}
+mark1_background #{{ colors "blue" }}
+mark2_foreground #{{ bg "default" }}
+mark2_background #{{ colors "magenta" }}
+mark3_foreground #{{ bg "default" }}
+mark3_background #{{ colors "cyan" }}
+
+# The 16 terminal colors
+
+# black
+color0 #{{ bg "highlight" }}
+color8 #{{ fg "subtle" }}
+
+# red
+color1 #{{ colors "red" }}
+color9 #{{ colors "red" }}
+
+# green
+color2  #{{ colors "green" }}
+color10 #{{ colors "green" }}
+
+# yellow
+color3  #{{ colors "yellow" }}
+color11 #{{ colors "yellow" }}
+
+# blue
+color4  #{{ colors "blue" }}
+color12 #{{ colors "blue" }}
+
+# magenta
+color5  #{{ colors "magenta" }}
+color13 #{{ colors "magenta" }}
+
+# cyan
+color6  #{{ colors "cyan" }}
+color14 #{{ colors "cyan" }}
+
+# white
+color7  #{{ fg "muted" }}
+color15 #{{ fg "default" }}
+
+background_tint 0.75
+background_image ./backgrounds/dark.png
+background_image_layout mirror-tiled
+
