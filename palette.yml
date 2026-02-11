@@ -14,6 +14,9 @@ dark:
     blue: "#7e9cd8"
     magenta: "#a89ecb"
     cyan: "#7aa89f"
+    orange: "#ffa066"
+    azure: "#7fb4ca"
+    purple: "#957fb8"
 
 light:
   bg:
@@ -31,3 +34,6 @@ light:
     blue: "#4c6fae"
     magenta: "#6f5fa6"
     cyan: "#4a8a7a"
+    orange: "#b35c00"
+    azure: "#4583a2"
+    purple: "#6f5096"

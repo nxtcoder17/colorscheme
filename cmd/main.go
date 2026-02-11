@@ -8,6 +8,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/nxtcoder17/colorscheme/pkg/colors"
 	"gopkg.in/yaml.v3"
 )
 
@@ -218,6 +219,10 @@ func processTemplate(templatePath string, data TemplateData) (string, error) {
 			}
 			return ifFalse
 		},
+
+		// Color manipulation
+		"darken":  colors.Darken,
+		"lighten": colors.Lighten,
 	}
 
 	tmpl, err := template.New(filepath.Base(templatePath)).Funcs(funcMap).ParseFiles(templatePath)

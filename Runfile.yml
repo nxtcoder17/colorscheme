@@ -108,7 +108,8 @@ tasks:
   nvim/generate:
     env:
       THEME_DIR:
-        sh: echo "$HOME/.config/simple.nvim/colors/generated"
+        # sh: echo "$HOME/.config/simple.nvim/colors/generated"
+        sh: echo "$HOME/.config/nvim/colors/"
     cmd:
       - mkdir -p $THEME_DIR
       - run: generate
@@ -140,15 +141,10 @@ tasks:
 
   kitty/generate:
     env:
-      LIGHT: "./templates/kitty/light.gotmpl"
-      DARK: "./templates/kitty/dark.gotmpl"
-
       KITTY_DIR:
         sh: echo "$HOME/.config/kitty/"
     cmd:
-      - |+
-        set -x
-        mkdir -p $KITTY_DIR/{themes,backgrounds}
+      - mkdir -p $KITTY_DIR/{themes,backgrounds}
 
       - run: generate
         env:
@@ -177,33 +173,8 @@ tasks:
         sh: echo "$HOME/.config/kitty/"
     cmd:
       - ln -sf $KITTY_DIR/themes/$MODE.conf $KITTY_DIR/themes/theme.conf
-
-      - |+
-        # Reload kitty colors if running
-        # Requires allow_remote_control in kitty.conf
-        if ! pgrep -x kitty &>/dev/null; then
-          exit 0
-        fi
-
-        THEME_FILE="$KITTY_DIR/themes/theme.conf"
-
-        # Try direct socket (works when run from within kitty)
-        if [ -n "$KITTY_LISTEN_ON" ]; then
-          timeout 2 kitty @ --to "$KITTY_LISTEN_ON" set-colors -a -c "$THEME_FILE" 2>/dev/null && exit 0
-        fi
-
-        # Try without --to (works if KITTY_PID is set)
-        if [ -n "$KITTY_PID" ]; then
-          timeout 2 kitty @ set-colors -a -c "$THEME_FILE" 2>/dev/null && exit 0
-        fi
-
-        # Try common socket locations (kitty-{pid} pattern)
-        for sock in /tmp/kitty-*; do
-          [ -S "$sock" ] || continue
-          timeout 2 kitty @ --to "unix:$sock" set-colors -a -c "$THEME_FILE" 2>/dev/null
-        done
-
-        echo "kitty: could not reload (enable allow_remote_control and listen_on in kitty.conf)"
+      # [RELOADING kitty](https://www.reddit.com/r/KittyTerminal/comments/rzpjed/easier_ways_to_reload_kitty)
+      - kill -USR1 $(pgrep kitty)
 
   k9s/generate:
     env:

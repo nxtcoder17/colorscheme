@@ -1,13 +1,68 @@
-local M = {
-  background = "#{{ bg "default" }}",
-  surface    = "#{{ bg "surface" }}",
-  text       = "#{{ fg "default" }}",
-  comment    = "#{{ fg "muted" }}",
-  keyword    = "#{{ colors "magenta" }}",
-  string     = "#{{ colors "green" }}",
-  fn         = "#{{ colors "blue" }}",
-  error      = "#{{ colors "red" }}",
-  warning    = "#{{ colors "yellow" }}",
+local palette = {
+	bg_edge2 = '#{{ darken (bg "surface") 15 }}',
+	bg_edge = '#{{ bg "surface" }}',
+	bg = '#{{ bg "default" }}',
+	bg_mid = '#{{ bg "highlight" }}',
+	bg_mid2 = '#{{ lighten (bg "highlight") 15 }}',
+
+	fg_edge2 = '#{{ lighten (fg "default") 10 }}',
+	fg_edge = '#{{ fg "default" }}',
+	fg = '#{{ fg "default" }}',
+	fg_mid = '#{{ lighten (fg "muted") 20 }}',
+	fg_mid2 = '#{{ lighten (fg "subtle") 30 }}',
+
+	accent = '#{{ colors "cyan" }}',
+	accent_bg = '#{{ darken (colors "cyan") 60 }}',
+
+	red = '#{{ colors "red" }}',
+	red_bg = '#{{ darken (colors "red") 60 }}',
+	orange = '#{{ colors "orange" }}',
+	orange_bg = '#{{ darken (colors "orange") 60 }}',
+	yellow = '#{{ colors "yellow" }}',
+	yellow_bg = '#{{ darken (colors "yellow") 60 }}',
+	green = '#{{ colors "green" }}',
+	green_bg = '#{{ darken (colors "green") 60 }}',
+	cyan = '#{{ colors "cyan" }}',
+	cyan_bg = '#{{ darken (colors "cyan") 60 }}',
+	azure = '#{{ colors "azure" }}',
+	azure_bg = '#{{ darken (colors "azure") 60 }}',
+	blue = '#{{ colors "blue" }}',
+	blue_bg = '#{{ darken (colors "blue") 60 }}',
+	purple = '#{{ lighten (colors "purple") 15 }}',
+	purple_bg = '#{{ darken (colors "purple") 60 }}',
 }
 
-return M
+require("mini.hues").apply_palette(palette)
+
+-- require("mini.hues").setup({
+-- 	background = palette.bg,
+-- 	foreground = palette.fg,
+-- 	n_hues = 4,
+-- 	saturation = "lowmedium",
+-- 	accent = "yellow",
+-- })
+
+-- Overrides using our palette colors
+vim.api.nvim_set_hl(0, "Delimiter", { fg = palette.azure })
+vim.api.nvim_set_hl(0, "@punctuation.bracket", { fg = palette.azure })
+vim.api.nvim_set_hl(0, "@punctuation.delimiter", { fg = palette.azure })
+vim.api.nvim_set_hl(0, "Constant", { fg = palette.purple })
+vim.api.nvim_set_hl(0, "@number", { fg = palette.purple })
+vim.api.nvim_set_hl(0, "@boolean", { fg = palette.purple })
+
+-- Keywords: make them stand out (desaturated orange)
+local keyword_color = '#{{ darken (colors "yellow") 20 }}'
+vim.api.nvim_set_hl(0, "Keyword", { fg = keyword_color, bold = true })
+vim.api.nvim_set_hl(0, "@keyword", { fg = keyword_color, bold = true })
+vim.api.nvim_set_hl(0, "Statement", { fg = keyword_color, bold = true })
+vim.api.nvim_set_hl(0, "@keyword.function", { fg = keyword_color, bold = true })
+vim.api.nvim_set_hl(0, "@keyword.return", { fg = keyword_color })
+
+local text_color = '#{{ fg "default" }}'
+vim.api.nvim_set_hl(0, "Type", { fg = type_color, bold = true })
+vim.api.nvim_set_hl(0, "@type.go", { link = "Type" })
+
+vim.api.nvim_set_hl(0, "Identifier", { fg = text_color })
+
+vim.api.nvim_set_hl(0, "Normal", { bg = "None" })
+
