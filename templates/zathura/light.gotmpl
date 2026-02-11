@@ -1,0 +1,36 @@
+# Zathura Light Theme
+
+set default-bg "#{{ bg "default" }}"
+set default-fg "#{{ fg "default" }}"
+
+set statusbar-bg "#{{ bg "surface" }}"
+set statusbar-fg "#{{ fg "default" }}"
+
+set inputbar-bg "#{{ bg "surface" }}"
+set inputbar-fg "#{{ fg "default" }}"
+
+set notification-bg "#{{ bg "surface" }}"
+set notification-fg "#{{ fg "default" }}"
+set notification-error-bg "#{{ colors "red" }}"
+set notification-error-fg "#{{ bg "default" }}"
+set notification-warning-bg "#{{ colors "yellow" }}"
+set notification-warning-fg "#{{ bg "default" }}"
+
+set highlight-color "#{{ colors "yellow" }}"
+set highlight-active-color "#{{ colors "blue" }}"
+
+set completion-bg "#{{ bg "surface" }}"
+set completion-fg "#{{ fg "default" }}"
+set completion-highlight-bg "#{{ bg "highlight" }}"
+set completion-highlight-fg "#{{ fg "default" }}"
+set completion-group-bg "#{{ bg "surface" }}"
+set completion-group-fg "#{{ colors "blue" }}"
+
+set render-loading-bg "#{{ bg "default" }}"
+set render-loading-fg "#{{ fg "muted" }}"
+
+# Recolor document to match theme
+set recolor true
+set recolor-lightcolor "#{{ bg "default" }}"
+set recolor-darkcolor "#{{ fg "default" }}"
+set recolor-keephue true

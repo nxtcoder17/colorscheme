@@ -1,0 +1,100 @@
+k9s:
+  body:
+    fgColor: '#{{ fg "default" }}'
+    bgColor: 'default'
+    logoColor: '#{{ colors "magenta" }}'
+  prompt:
+    fgColor: '#{{ fg "default" }}'
+    bgColor: 'default'
+    suggestColor: '#{{ colors "blue" }}'
+  help:
+    fgColor: '#{{ fg "default" }}'
+    bgColor: 'default'
+    sectionColor: '#{{ colors "green" }}'
+    keyColor: '#{{ colors "blue" }}'
+    numKeyColor: '#{{ colors "red" }}'
+  frame:
+    title:
+      fgColor: '#{{ colors "cyan" }}'
+      bgColor: 'default'
+      highlightColor: '#{{ colors "magenta" }}'
+      counterColor: '#{{ colors "yellow" }}'
+      filterColor: '#{{ colors "green" }}'
+    border:
+      fgColor: '#{{ colors "magenta" }}'
+      focusColor: '#{{ colors "blue" }}'
+    menu:
+      fgColor: '#{{ fg "default" }}'
+      keyColor: '#{{ colors "blue" }}'
+      numKeyColor: '#{{ colors "red" }}'
+    crumbs:
+      fgColor: '#{{ bg "default" }}'
+      bgColor: 'default'
+      activeColor: '#{{ colors "cyan" }}'
+    status:
+      newColor: '#{{ colors "blue" }}'
+      modifyColor: '#{{ colors "yellow" }}'
+      addColor: '#{{ colors "green" }}'
+      pendingColor: '#{{ colors "yellow" }}'
+      errorColor: '#{{ colors "red" }}'
+      highlightColor: '#{{ colors "cyan" }}'
+      killColor: '#{{ colors "magenta" }}'
+      completedColor: '#{{ fg "muted" }}'
+  info:
+    fgColor: '#{{ colors "yellow" }}'
+    sectionColor: '#{{ fg "default" }}'
+  views:
+    table:
+      fgColor: '#{{ fg "default" }}'
+      bgColor: 'default'
+      cursorFgColor: '#{{ bg "surface" }}'
+      cursorBgColor: '#{{ bg "highlight" }}'
+      markColor: '#{{ colors "cyan" }}'
+      header:
+        fgColor: '#{{ colors "yellow" }}'
+        bgColor: 'default'
+        sorterColor: '#{{ colors "cyan" }}'
+    xray:
+      fgColor: '#{{ fg "default" }}'
+      bgColor: 'default'
+      cursorColor: '#{{ bg "highlight" }}'
+      cursorTextColor: '#{{ bg "default" }}'
+      graphicColor: '#{{ colors "magenta" }}'
+    charts:
+      bgColor: 'default'
+      chartBgColor: 'default'
+      dialBgColor: 'default'
+      defaultDialColors:
+        - '#{{ colors "green" }}'
+        - '#{{ colors "red" }}'
+      defaultChartColors:
+        - '#{{ colors "green" }}'
+        - '#{{ colors "red" }}'
+      resourceColors:
+        cpu:
+          - '#{{ colors "magenta" }}'
+          - '#{{ colors "blue" }}'
+        mem:
+          - '#{{ colors "yellow" }}'
+          - '#{{ colors "red" }}'
+    yaml:
+      keyColor: '#{{ colors "blue" }}'
+      valueColor: '#{{ fg "default" }}'
+      colonColor: '#{{ fg "muted" }}'
+    logs:
+      fgColor: '#{{ fg "default" }}'
+      bgColor: 'default'
+      indicator:
+        fgColor: '#{{ colors "blue" }}'
+        bgColor: 'default'
+        toggleOnColor: '#{{ colors "green" }}'
+        toggleOffColor: '#{{ fg "muted" }}'
+  dialog:
+    fgColor: '#{{ colors "yellow" }}'
+    bgColor: 'default'
+    buttonFgColor: '#{{ bg "default" }}'
+    buttonBgColor: 'default'
+    buttonFocusFgColor: '#{{ bg "default" }}'
+    buttonFocusBgColor: '#{{ colors "magenta" }}'
+    labelFgColor: '#{{ colors "cyan" }}'
+    fieldFgColor: '#{{ fg "default" }}'

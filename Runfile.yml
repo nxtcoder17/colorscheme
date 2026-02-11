@@ -1,70 +1,419 @@
 env:
-  COLOR_OVERRIDES:
-    sh: |+
-      cat ./whisker-color-overrides.json | jq -rcM 'map_values(
-        . = map_values(
-          . = ltrimstr("#")
-        )
-      )'
-
-  OUTPUT_DIR: 
+  OUTPUT_DIR:
     sh: echo "$HOME/.colorscheme.d"
 
-tasks:
-  light-theme:
-    env:
-      flavour: latte
-    cmd:
-      - run: generate
-      - gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Light-Solid'
+  # Path to palette YAML file
+  COLORS_FILE: ./palette.yml
 
-  dark-theme:
+tasks:
+  # Build the colorscheme CLI tool
+  build:
     env:
-      flavour: mocha
+      CGO_ENABLED: 0
     cmd:
-      - run: generate
-      - gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark'
+      - go build -o ./bin/colorscheme ./cmd
 
   generate:
     env:
-      flavour:
+      MODE:
         required: true
-      OUTPUT_DIR:
+      INPUT:
         required: true
-      KITTY_BG_IMAGE_FILE:
-        sh: echo "$OUTPUT_DIR/kitty/background.png"
+      OUTPUT:
+        required: true
     cmd:
-      - mkdir -p $OUTPUT_DIR
       - |+
-        pushd templates > /dev/null 2>&1
-        for file in $(ls ./**/*.tera); do
-          DEST=${OUTPUT_DIR}/$(dirname $file) whiskers -f "$flavour" $file --color-overrides $COLOR_OVERRIDES
+        ./bin/colorscheme \
+            -flavor "$MODE" \
+            -template "$INPUT" \
+            -output "$OUTPUT" 
+
+  # Switch to light theme
+  light-theme:
+    env:
+      MODE: light
+    cmd:
+      - run: kitty/generate
+      - run: kitty/apply
+
+      - run: nvim/generate
+      - run: nvim/apply
+
+      - run: k9s/generate
+      - run: k9s/apply
+
+      - run: fish/generate
+      - run: fish/apply
+
+      - run: fzf/generate
+      - run: fzf/apply
+
+      - run: tmux/generate
+      - run: tmux/apply
+
+      - run: zellij/generate
+      - run: zellij/apply
+
+      - run: ghostty/generate
+      - run: ghostty/apply
+
+      - run: bat/generate
+      - run: bat/apply
+
+      - run: zathura/generate
+      - run: zathura/apply
+
+      - ./gtk-theme.sh 2>/dev/null || true
+      - echo "$MODE" > ~/.system-theme
+
+  # Switch to dark theme
+  dark-theme:
+    env:
+      MODE: dark
+    cmd:
+      - run: kitty/generate
+      - run: kitty/apply
+
+      - run: nvim/generate
+      - run: nvim/apply
+
+      - run: k9s/generate
+      - run: k9s/apply
+
+      - run: fish/generate
+      - run: fish/apply
+
+      - run: fzf/generate
+      - run: fzf/apply
+
+      - run: tmux/generate
+      - run: tmux/apply
+
+      - run: zellij/generate
+      - run: zellij/apply
+
+      - run: ghostty/generate
+      - run: ghostty/apply
+
+      - run: bat/generate
+      - run: bat/apply
+
+      - run: zathura/generate
+      - run: zathura/apply
+
+      - ./gtk-theme.sh 2>/dev/null || true
+      - echo "$MODE" > ~/.system-theme
+
+
+  nvim/generate:
+    env:
+      THEME_DIR:
+        # sh: echo "$HOME/.config/simple.nvim/colors/generated"
+        sh: echo "$HOME/.config/nvim/colors/"
+    cmd:
+      - mkdir -p $THEME_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/nvim/light.gotmpl
+          OUTPUT:
+            sh: echo $THEME_DIR/light.lua
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/nvim/dark.gotmpl
+          OUTPUT:
+            sh: echo $THEME_DIR/dark.lua
+
+  nvim/apply:
+    env:
+      MODE:
+        required: true
+    cmd:
+      - |+
+        # Reload neovim instances via remote
+        for sock in /run/user/$(id -u)/nvim.*.0 /tmp/nvim.*/0; do
+          if [ -S "$sock" ]; then
+            nvim --server "$sock" --remote-send "<Cmd>lua vim.cmd('colorscheme $MODE')<CR>" 2>/dev/null || true
+          fi
         done
-        popd > /dev/null 2>&1
-      - run: setup/kitty
-      - run: setup/tmux
-      - run: setup/k9s
 
-  setup/k9s:
-    cmd:
-      - mkdir -p ~/.config/k9s/skins
-      - ln -sf $OUTPUT_DIR/k9s/* ~/.config/k9s/skins/
 
-  setup/tmux:
+  kitty/generate:
     env:
-      file: ./templates/tmux.tera
+      KITTY_DIR:
+        sh: echo "$HOME/.config/kitty/"
     cmd:
-      - mkdir -p ~/.config/tmux/themes
-      - ln -sf $OUTPUT_DIR/tmux/* ~/.config/tmux/themes/
+      - mkdir -p $KITTY_DIR/{themes,backgrounds}
 
-  setup/kitty:
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/kitty/light.gotmpl
+          OUTPUT: 
+            sh: echo $KITTY_DIR/themes/light.conf
+
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/kitty/dark.gotmpl
+          OUTPUT: 
+            sh: echo $KITTY_DIR/themes/dark.conf
+
+      - |+
+        cp ./templates/kitty/kitty-background-light.png $KITTY_DIR/backgrounds/light.png
+        cp ./templates/kitty/kitty-background-dark.png $KITTY_DIR/backgrounds/dark.png
+
+  kitty/apply:
     env:
-      KITTY_BG_IMAGE_FILE:
+      MODE:
+        required: true
+
+      KITTY_DIR:
+        sh: echo "$HOME/.config/kitty/"
+    cmd:
+      - ln -sf $KITTY_DIR/themes/$MODE.conf $KITTY_DIR/themes/theme.conf
+      # [RELOADING kitty](https://www.reddit.com/r/KittyTerminal/comments/rzpjed/easier_ways_to_reload_kitty)
+      - kill -USR1 $(pgrep kitty)
+
+  k9s/generate:
+    env:
+      K9S_DIR:
+        sh: echo "$HOME/.config/k9s/skins"
+    cmd:
+      - mkdir -p $K9S_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/k9s/light.gotmpl
+          OUTPUT:
+            sh: echo $K9S_DIR/light.yaml
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/k9s/dark.gotmpl
+          OUTPUT:
+            sh: echo $K9S_DIR/dark.yaml
+
+  k9s/apply:
+    env:
+      MODE:
+        required: true
+      K9S_DIR:
+        sh: echo "$HOME/.config/k9s/skins"
+    cmd:
+      - ln -sf $K9S_DIR/$MODE.yaml $K9S_DIR/theme.yaml
+
+  fish/generate:
+    env:
+      FISH_DIR:
+        sh: echo "$HOME/.config/fish/themes"
+    cmd:
+      - mkdir -p $FISH_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/fish/light.gotmpl
+          OUTPUT:
+            sh: echo $FISH_DIR/light.fish
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/fish/dark.gotmpl
+          OUTPUT:
+            sh: echo $FISH_DIR/dark.fish
+
+  fish/apply:
+    env:
+      MODE:
+        required: true
+      FISH_DIR:
+        sh: echo "$HOME/.config/fish/themes"
+    cmd:
+      - ln -sf $FISH_DIR/$MODE.fish $FISH_DIR/theme.fish
+
+  fzf/generate:
+    env:
+      FZF_DIR:
+        sh: echo "$HOME/.config/fzf/themes"
+    cmd:
+      - mkdir -p $FZF_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/fzf/light.bash.gotmpl
+          OUTPUT:
+            sh: echo $FZF_DIR/light.bash
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/fzf/dark.bash.gotmpl
+          OUTPUT:
+            sh: echo $FZF_DIR/dark.bash
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/fzf/light.fish.gotmpl
+          OUTPUT:
+            sh: echo $FZF_DIR/light.fish
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/fzf/dark.fish.gotmpl
+          OUTPUT:
+            sh: echo $FZF_DIR/dark.fish
+
+  fzf/apply:
+    env:
+      MODE:
+        required: true
+      FZF_DIR:
+        sh: echo "$HOME/.config/fzf/themes"
+    cmd:
+      - ln -sf $FZF_DIR/$MODE.bash $FZF_DIR/theme.bash
+      - ln -sf $FZF_DIR/$MODE.fish $FZF_DIR/theme.fish
+
+  tmux/generate:
+    env:
+      TMUX_DIR:
+        sh: echo "$HOME/.config/tmux/themes"
+    cmd:
+      - mkdir -p $TMUX_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/tmux/light.gotmpl
+          OUTPUT:
+            sh: echo $TMUX_DIR/light.sh
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/tmux/dark.gotmpl
+          OUTPUT:
+            sh: echo $TMUX_DIR/dark.sh
+
+  tmux/apply:
+    env:
+      MODE:
+        required: true
+      TMUX_DIR:
+        sh: echo "$HOME/.config/tmux/themes"
+    cmd:
+      - ln -sf $TMUX_DIR/$MODE.sh $TMUX_DIR/theme.sh
+      - |+
+        # Reload tmux if running
+        if tmux list-sessions &>/dev/null; then
+          tmux source-file ~/.config/tmux/tmux.conf 2>/dev/null || \
+          tmux source-file $TMUX_DIR/theme.sh 2>/dev/null || true
+        fi
+
+  zellij/generate:
+    env:
+      ZELLIJ_DIR:
+        sh: echo "$HOME/.config/zellij"
+    cmd:
+      - mkdir -p $ZELLIJ_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/zellij/light.gotmpl
+          OUTPUT:
+            sh: echo $ZELLIJ_DIR/light.kdl
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/zellij/dark.gotmpl
+          OUTPUT:
+            sh: echo $ZELLIJ_DIR/dark.kdl
+
+  zellij/apply:
+    env:
+      MODE:
         required: true
     cmd:
-      - |+
-        if [[ "$flavour" = "mocha" ]]; then
-          ln -sf $PWD/templates/kitty/kitty-background-dark.png $KITTY_BG_IMAGE_FILE
-        else
-          ln -sf $PWD/templates/kitty/kitty-background-light.png $KITTY_BG_IMAGE_FILE
-        fi
+      - echo "theme \"system-$MODE\"" > ~/.config/zellij/theme.kdl
+
+  ghostty/generate:
+    env:
+      GHOSTTY_DIR:
+        sh: echo "$HOME/.config/ghostty/themes"
+    cmd:
+      - mkdir -p $GHOSTTY_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/ghostty/light.gotmpl
+          OUTPUT:
+            sh: echo $GHOSTTY_DIR/light.conf
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/ghostty/dark.gotmpl
+          OUTPUT:
+            sh: echo $GHOSTTY_DIR/dark.conf
+
+  ghostty/apply:
+    env:
+      MODE:
+        required: true
+      GHOSTTY_DIR:
+        sh: echo "$HOME/.config/ghostty/themes"
+    cmd:
+      - ln -sf $GHOSTTY_DIR/$MODE.conf $GHOSTTY_DIR/theme.conf
+      - pkill -USR1 ghostty 2>/dev/null || true
+
+  bat/generate:
+    env:
+      BAT_DIR:
+        sh: echo "$HOME/.config/bat/themes"
+    cmd:
+      - mkdir -p $BAT_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/bat/light.gotmpl
+          OUTPUT:
+            sh: echo $BAT_DIR/light.conf
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/bat/dark.gotmpl
+          OUTPUT:
+            sh: echo $BAT_DIR/dark.conf
+
+  bat/apply:
+    env:
+      MODE:
+        required: true
+      BAT_DIR:
+        sh: echo "$HOME/.config/bat"
+    cmd:
+      - ln -sf $BAT_DIR/themes/$MODE.conf $BAT_DIR/config
+
+  zathura/generate:
+    env:
+      ZATHURA_DIR:
+        sh: echo "$HOME/.config/zathura/themes"
+    cmd:
+      - mkdir -p $ZATHURA_DIR
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/zathura/light.gotmpl
+          OUTPUT:
+            sh: echo $ZATHURA_DIR/light
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/zathura/dark.gotmpl
+          OUTPUT:
+            sh: echo $ZATHURA_DIR/dark
+
+  zathura/apply:
+    env:
+      MODE:
+        required: true
+      ZATHURA_DIR:
+        sh: echo "$HOME/.config/zathura"
+    cmd:
+      - ln -sf $ZATHURA_DIR/themes/$MODE $ZATHURA_DIR/theme

@@ -1,0 +1,35 @@
+local palette = {
+  bg_edge2 = '#{{ lighten (bg "surface") 15 }}',
+  bg_edge  = '#{{ bg "surface" }}',
+  bg       = '#{{ bg "default" }}',
+  bg_mid   = '#{{ bg "highlight" }}',
+  bg_mid2  = '#{{ darken (bg "highlight") 15 }}',
+
+  fg_edge2 = '#{{ darken (fg "default") 10 }}',
+  fg_edge  = '#{{ fg "default" }}',
+  fg       = '#{{ fg "default" }}',
+  fg_mid   = '#{{ fg "muted" }}',
+  fg_mid2  = '#{{ fg "subtle" }}',
+
+  accent    = '#{{ colors "yellow" }}',
+  accent_bg = '#{{ lighten (colors "yellow") 60 }}',
+
+  red       = '#{{ colors "red" }}',
+  red_bg    = '#{{ lighten (colors "red") 60 }}',
+  orange    = '#{{ colors "orange" }}',
+  orange_bg = '#{{ lighten (colors "orange") 60 }}',
+  yellow    = '#{{ colors "yellow" }}',
+  yellow_bg = '#{{ lighten (colors "yellow") 60 }}',
+  green     = '#{{ colors "green" }}',
+  green_bg  = '#{{ lighten (colors "green") 60 }}',
+  cyan      = '#{{ colors "cyan" }}',
+  cyan_bg   = '#{{ lighten (colors "cyan") 60 }}',
+  azure     = '#{{ colors "azure" }}',
+  azure_bg  = '#{{ lighten (colors "azure") 60 }}',
+  blue      = '#{{ colors "blue" }}',
+  blue_bg   = '#{{ lighten (colors "blue") 60 }}',
+  purple    = '#{{ colors "purple" }}',
+  purple_bg = '#{{ lighten (colors "purple") 60 }}',
+}
+
+require('mini.hues').apply_palette(palette)
