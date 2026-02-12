@@ -68,3 +68,21 @@ vim.api.nvim_set_hl(0, "@type.go", { link = "Type" })
 vim.api.nvim_set_hl(0, "Identifier", { fg = text_color })
 
 vim.api.nvim_set_hl(0, "Normal", { bg = "None" })
+
+-- Make comments more readable in light mode
+vim.api.nvim_set_hl(0, "Comment", { fg = palette.fg_mid, italic = true })
+vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
+
+-- MiniStatusline mode highlights
+vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { fg = palette.bg, bg = palette.blue, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { fg = palette.bg, bg = palette.green, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { fg = palette.bg, bg = palette.purple, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { fg = palette.bg, bg = palette.red, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { fg = palette.bg, bg = palette.yellow, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeOther", { fg = palette.bg, bg = palette.fg_mid, bold = true })
+
+-- MiniStatusline section highlights
+vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { fg = palette.fg, bg = palette.bg_mid2 })
+vim.api.nvim_set_hl(0, "MiniStatuslineFilename", { fg = palette.fg, bg = palette.bg_mid })
+vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = palette.fg, bg = palette.bg_mid2 })
+vim.api.nvim_set_hl(0, "MiniStatuslineInactive", { fg = palette.fg_mid2, bg = palette.bg_mid })
