@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -223,6 +224,18 @@ func processTemplate(templatePath string, data TemplateData) (string, error) {
 		// Color manipulation
 		"darken":  colors.Darken,
 		"lighten": colors.Lighten,
+
+		// RGB conversion for LS_COLORS (hex -> "R;G;B")
+		"rgb": func(hex string) string {
+			hex = strings.TrimPrefix(hex, "#")
+			if len(hex) != 6 {
+				return "255;255;255"
+			}
+			r, _ := strconv.ParseInt(hex[0:2], 16, 64)
+			g, _ := strconv.ParseInt(hex[2:4], 16, 64)
+			b, _ := strconv.ParseInt(hex[4:6], 16, 64)
+			return fmt.Sprintf("%d;%d;%d", r, g, b)
+		},
 	}
 
 	tmpl, err := template.New(filepath.Base(templatePath)).Funcs(funcMap).ParseFiles(templatePath)

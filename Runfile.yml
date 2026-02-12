@@ -63,6 +63,9 @@ tasks:
       - run: zathura/generate
       - run: zathura/apply
 
+      - run: ls/generate
+      - run: ls/apply
+
       - ./gtk-theme.sh 2>/dev/null || true
       - echo "$MODE" > ~/.system-theme
 
@@ -100,6 +103,9 @@ tasks:
 
       - run: zathura/generate
       - run: zathura/apply
+
+      - run: ls/generate
+      - run: ls/apply
 
       - ./gtk-theme.sh 2>/dev/null || true
       - echo "$MODE" > ~/.system-theme
@@ -417,3 +423,33 @@ tasks:
         sh: echo "$HOME/.config/zathura"
     cmd:
       - ln -sf $ZATHURA_DIR/themes/$MODE $ZATHURA_DIR/theme
+
+  ls/generate:
+    env:
+      LS_DIR:
+        sh: echo "$HOME/.config/ls/themes"
+    cmd:
+      - mkdir -p $LS_DIR
+
+      - run: generate
+        env:
+          MODE: light
+          INPUT: ./templates/ls/light.gotmpl
+          OUTPUT:
+            sh: echo $LS_DIR/light.bash
+
+      - run: generate
+        env:
+          MODE: dark
+          INPUT: ./templates/ls/dark.gotmpl
+          OUTPUT:
+            sh: echo $LS_DIR/dark.bash
+
+  ls/apply:
+    env:
+      MODE:
+        required: true
+      LS_DIR:
+        sh: echo "$HOME/.config/ls/themes"
+    cmd:
+      - ln -sf $LS_DIR/$MODE.bash $LS_DIR/theme.bash

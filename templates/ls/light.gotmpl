@@ -1,0 +1,22 @@
+{{- $dir := printf "38;2;%s" (rgb (colors "blue")) -}}
+{{- $link := printf "38;2;%s" (rgb (colors "cyan")) -}}
+{{- $exec := printf "38;2;%s" (rgb (colors "green")) -}}
+{{- $archive := printf "38;2;%s" (rgb (colors "red")) -}}
+{{- $image := printf "38;2;%s" (rgb (colors "magenta")) -}}
+{{- $video := printf "38;2;%s" (rgb (colors "purple")) -}}
+{{- $audio := printf "38;2;%s" (rgb (colors "orange")) -}}
+{{- $doc := printf "38;2;%s" (rgb (colors "yellow")) -}}
+{{- $config := printf "38;2;%s" (rgb (colors "azure")) -}}
+{{- $source := printf "38;2;%s" (rgb (colors "green")) -}}
+{{- $muted := printf "38;2;%s" (rgb (fg "muted")) -}}
+export LS_COLORS="di={{$dir}}:ln={{$link}}:ex={{$exec}}:fi=0:\
+*.tar={{$archive}}:*.gz={{$archive}}:*.xz={{$archive}}:*.bz2={{$archive}}:*.zst={{$archive}}:\
+*.zip={{$archive}}:*.rar={{$archive}}:*.7z={{$archive}}:*.deb={{$archive}}:*.rpm={{$archive}}:\
+*.png={{$image}}:*.jpg={{$image}}:*.jpeg={{$image}}:*.gif={{$image}}:*.bmp={{$image}}:*.svg={{$image}}:*.webp={{$image}}:*.ico={{$image}}:\
+*.mp4={{$video}}:*.mkv={{$video}}:*.avi={{$video}}:*.mov={{$video}}:*.webm={{$video}}:*.flv={{$video}}:\
+*.mp3={{$audio}}:*.wav={{$audio}}:*.flac={{$audio}}:*.ogg={{$audio}}:*.m4a={{$audio}}:\
+*.pdf={{$doc}}:*.md={{$doc}}:*.txt={{$doc}}:*.rst={{$doc}}:*.org={{$doc}}:\
+*.yml={{$config}}:*.yaml={{$config}}:*.json={{$config}}:*.toml={{$config}}:*.ini={{$config}}:*.conf={{$config}}:*.nix={{$config}}:\
+*.go={{$source}}:*.py={{$source}}:*.js={{$source}}:*.ts={{$source}}:*.rs={{$source}}:*.c={{$source}}:*.cpp={{$source}}:*.h={{$source}}:\
+*.java={{$source}}:*.lua={{$source}}:*.rb={{$source}}:*.sh={{$exec}}:*.bash={{$exec}}:*.zsh={{$exec}}:*.fish={{$exec}}:\
+*.lock={{$muted}}:*.sum={{$muted}}:*.mod={{$muted}}"
