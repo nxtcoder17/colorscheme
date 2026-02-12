@@ -37,7 +37,7 @@ tasks:
       - run: kitty/apply
 
       - run: nvim/generate
-      - run: nvim/apply
+      # - run: nvim/apply
 
       - run: k9s/generate
       - run: k9s/apply
