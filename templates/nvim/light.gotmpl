@@ -43,7 +43,10 @@ require("mini.hues").apply_palette(palette, {
 	["williamboman/mason.nvim"] = true,
 })
 
-vim.g.colors_name = "dark"
+vim.g.colors_name = "light"
+
+-- Resets
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = vim.NONE })
 
 -- Overrides using our palette colors
 vim.api.nvim_set_hl(0, "Delimiter", { fg = palette.azure })
