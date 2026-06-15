@@ -114,7 +114,6 @@ tasks:
   nvim/generate:
     env:
       THEME_DIR:
-        # sh: echo "$HOME/.config/simple.nvim/colors/generated"
         sh: echo "$HOME/.config/nvim/colors/"
     cmd:
       - mkdir -p $THEME_DIR
@@ -124,6 +123,7 @@ tasks:
           INPUT: ./templates/nvim/light.gotmpl
           OUTPUT:
             sh: echo $THEME_DIR/light.lua
+
       - run: generate
         env:
           MODE: dark
